@@ -1,3 +1,12 @@
+[![Gem Version](http://img.shields.io/gem/v/criteria_operator-ui_component.svg?style=flat)](https://rubygems.org/gems/criteria_operator-ui_component)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](http://TheFlow0360.mit-license.org)
+[![Build Status](http://img.shields.io/travis/TheFlow0360/criteria_operator-ui_component.svg?style=flat)](https://travis-ci.org/TheFlow0360/criteria_operator-ui_component)
+[![Dependency Status](http://img.shields.io/gemnasium/TheFlow0360/criteria_operator-ui_component.svg?style=flat)](https://gemnasium.com/TheFlow0360/criteria_operator-ui_component)
+[![Code Climate](http://img.shields.io/codeclimate/github/TheFlow0360/criteria_operator-ui_component.svg?style=flat)](https://codeclimate.com/github/TheFlow0360/criteria_operator-ui_component)
+[![Coverage Status](https://coveralls.io/repos/github/TheFlow0360/criteria_operator-ui_component/badge.svg?branch=master)](https://coveralls.io/github/TheFlow0360/criteria_operator-ui_component?branch=master)
+[![Inline docs](http://inch-ci.org/github/TheFlow0360/criteria_operator-ui_component.svg?branch=master&style=shields)](http://inch-ci.org/github/TheFlow0360/criteria_operator-ui_component)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/963/badge)](https://bestpractices.coreinfrastructure.org/projects/963)
+
 # CriteriaOperator::UiComponent
 
 This gem is an extension to the [criteria_operator](https://github.com/TheFlow0360/criteria_operator) gem and provides UI to be used in a Rails application. This component allows easy editing of filter statements represented by the criteria_operator classes.
