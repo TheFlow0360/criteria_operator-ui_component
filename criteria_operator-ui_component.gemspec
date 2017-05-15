@@ -38,13 +38,14 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "minitest-reporters", "~> 1.1"
   spec.add_development_dependency "coveralls", "~> 0.8"
+  spec.add_development_dependency "sqlite3"
 
-  spec.add_dependency "rails", "~> 5.0.2"
+  spec.add_dependency "rails", "~> 5.1"
   spec.add_dependency "cells", "~> 4.1"
+  spec.add_dependency "cells-rails", "~> 0.0"
+  spec.add_dependency "cells-erb", "~> 0.1"
   spec.add_dependency "criteria_operator", "~> 0.2"
 
   # let yard run on install
   spec.metadata["yard.run"] = "yri"
-
-
 end
