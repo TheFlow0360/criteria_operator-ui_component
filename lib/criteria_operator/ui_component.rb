@@ -1,4 +1,4 @@
-require "criteria_operator/ui_component/engine"
+require 'criteria_operator/ui_component/engine'
 
 module CriteriaOperator
   module UiComponent

@@ -7,12 +7,18 @@ SimpleCov.start do
   add_filter 'criteria_operator/ui_component/version'
 end
 
-require 'criteria_operator-ui_component'
+require 'rails'
+require 'cell'
+require 'cell/test_case'
+require 'criteria_operator/ui_component'
 
 require 'minitest/autorun'
 require 'minitest/reporters'
 
 MiniTest::Reporters.use!
+
+# Configure Rails Environment
+ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]

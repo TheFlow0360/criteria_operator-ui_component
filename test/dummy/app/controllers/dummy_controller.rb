@@ -1,7 +1,7 @@
 class DummyController < ApplicationController
   def show
     @whatever = 42
-    # CriteriaOperator::UiComponent::Cell.(@whatever).()
-    # render
+
+    render { CriteriaOperator::UiComponent::CriteriaEditorCell.(@whatever).() }
   end
 end
