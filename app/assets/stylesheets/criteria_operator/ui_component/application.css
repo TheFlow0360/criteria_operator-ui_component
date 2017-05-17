@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+.criteria_editor {
+    border: dashed #2E2F30 thin;
+    padding: 5px;
+}
