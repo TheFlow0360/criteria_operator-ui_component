@@ -42,7 +42,7 @@
          */
         this.element = element;
         this._name = pluginName;
-        this._defaults = $.fn.myPluginName.defaults;
+        this._defaults = $.fn.criteriaEditor.defaults;
         /*
          The "$.extend" method merges the contents of two or more objects,
          and stores the result in the first object. The first object is
@@ -190,7 +190,7 @@
 
      More: http://learn.jquery.com/plugins/basic-plugin-creation/
      */
-    $.fn.myPluginName = function ( options ) {
+    $.fn.criteriaEditor = function ( options ) {
         this.each(function() {
             if ( !$.data( this, "plugin_" + pluginName ) ) {
                 /*
@@ -224,9 +224,16 @@
 
      More: http://learn.jquery.com/plugins/advanced-plugin-concepts/
      */
-    $.fn.myPluginName.defaults = {
+    $.fn.criteriaEditor.defaults = {
+        name: '',
         property: 'value',
         onComplete: null
     };
 
 })( jQuery, window, document );
+
+$(document).ready(function() {
+    $('.criteria_editor').criteriaEditor({
+        name: 'criteria_editor'
+    });
+});

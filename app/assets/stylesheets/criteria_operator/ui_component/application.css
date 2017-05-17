@@ -18,3 +18,23 @@
     border: dashed #2E2F30 thin;
     padding: 5px;
 }
+
+.criteria_editor_header {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.criteria_group_row {
+    border: dashed #666666 thin;
+    padding: 5px;
+}
+
+.criteria_group_row_header {
+    font-size: medium;
+    font-weight: bold;
+}
+
+.criteria_expression_row {
+    border: dotted #999999 thin;
+}
