@@ -131,7 +131,7 @@
              This allows us to unbind plugin-specific events using the
              unbindEvents method below.
              */
-            plugin.$element.on('click'+'.'+plugin._name, function() {
+            //plugin.$element.on('click'+'.'+plugin._name, function() {
                 /*
                  Use the "call" method so that inside of the method being
                  called, ie: "someOtherFunction", the "this" keyword refers
@@ -139,7 +139,10 @@
 
                  More: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call
                  */
-                plugin.someOtherFunction.call(plugin);
+            //    plugin.someOtherFunction.call(plugin);
+            //});
+            plugin.$element.find(plugin.options.newExpression).on('click'+'.'+plugin._name, function() {
+               plugin.createNewExpression(plugin)
             });
         },
 
@@ -152,18 +155,12 @@
             this.$element.off('.'+this._name);
         },
 
-        /*
-         "someOtherFunction" is an example of a custom method in your
-         plugin. Each method should perform a specific task. For example,
-         the buildCache method exists only to create variables for other
-         methods to access. The bindEvents method exists only to bind events
-         to event handlers that trigger other methods. Creating custom
-         plugin methods this way is less confusing (separation of concerns)
-         and makes your code easier to test.
-         */
-        // Create custom methods
-        someOtherFunction: function() {
-            alert('I promise to do something cool!');            this.callback();
+        createNewExpression: function() {
+            $.ajax("/criteria_operator-ui_component/create_expression").done(function(data) {
+                // TODO: make sure only the correct placeholder is deleted
+                $(".criteria_editor_empty_placeholder").remove()
+                $(".criteria_editor_row_wrapper").append(data['html'])
+            });
         },
 
         callback: function() {
@@ -197,7 +194,7 @@
                  Use "$.data" to save each instance of the plugin in case
                  the user wants to modify it. Using "$.data" in this way
                  ensures the data is removed when the DOM element(s) are
-                 removed via jQuery methods, as well as when the userleaves
+                 removed via jQuery methods, as well as when the user leaves
                  the page. It's a smart way to prevent memory leaks.
 
                  More: http://api.jquery.com/jquery.data/
@@ -227,7 +224,8 @@
     $.fn.criteriaEditor.defaults = {
         name: '',
         property: 'value',
-        onComplete: null
+        onComplete: null,
+        newExpression: '.criteria_editor_new_expression'
     };
 
 })( jQuery, window, document );

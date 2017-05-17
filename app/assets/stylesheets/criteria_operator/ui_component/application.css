@@ -38,3 +38,9 @@
 .criteria_expression_row {
     border: dotted #999999 thin;
 }
+
+.criteria_editor_empty_placeholder {
+    color: #999999;
+    padding: 15px;
+    border: dashed #999999;
+}
