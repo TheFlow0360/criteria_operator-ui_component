@@ -4,9 +4,7 @@
   <% if @allow_delete %>
     <a href="#" class="criteria_group_delete">Delete</a>
   <% end %>
-  <div class="criteria_editor_row_wrapper">
-    <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
-  </div>
+  <%= cell('criteria_operator/ui_component/group', @group).() %>
   <a href="#" class="criteria_editor_new_group">Add group</a><br />
   <a href="#" class="criteria_editor_new_expression">Add expression</a>
 </div>
