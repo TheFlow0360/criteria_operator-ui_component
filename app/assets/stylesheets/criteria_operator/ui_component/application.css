@@ -27,7 +27,6 @@
 
 .criteria_group_row {
     border: dashed #666666 thin;
-    padding: 5px;
 }
 
 .criteria_group_row_header {
@@ -43,4 +42,8 @@
     color: #999999;
     padding: 15px;
     border: dashed #999999;
+}
+
+.criteria_editor_row_wrapper {
+    margin-left: 10px;
 }

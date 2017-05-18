@@ -12,7 +12,8 @@ module CriteriaOperator
         render
       end
 
-      def group_row
+      def group_row(options = {})
+        @allow_delete = options.has_key?(:allow_delete) ? options[:allow_delete] : true
         render
       end
 

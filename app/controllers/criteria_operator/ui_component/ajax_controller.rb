@@ -6,13 +6,13 @@ module CriteriaOperator
   module UiComponent
     class AjaxController < ApplicationController
       def create_expression
-        operator = 42
+        operator = BinaryOperator.new
         html = CriteriaEditorCell.call(operator).call(:expression_row)
         render json: { html: html }
       end
 
       def create_group
-        operator = 42
+        operator = GroupOperator.new
         html = CriteriaEditorCell.call(operator).call(:group_row)
         render json: { html: html }
       end

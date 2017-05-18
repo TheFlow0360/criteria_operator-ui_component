@@ -147,6 +147,12 @@
             plugin.$element.find(plugin.options.newGroup).on('click'+'.'+plugin._name, function(event) {
                 plugin.createNewGroup.call(plugin, plugin.options, event.target);
             });
+            plugin.$element.find(plugin.options.deleteExpression).on('click'+'.'+plugin._name, function(event) {
+                plugin.deleteElement.call(plugin, plugin.options, event.target);
+            });
+            plugin.$element.find(plugin.options.deleteGroup).on('click'+'.'+plugin._name, function(event) {
+                plugin.deleteElement.call(plugin, plugin.options, event.target);
+            });
         },
 
         // Unbind events that trigger methods
@@ -176,6 +182,10 @@
                 wrapper.append(data['html']);
                 plugin.rebind();
             });
+        },
+
+        deleteElement: function(options, element) {
+            $(element).parent().remove()
         },
 
         rebind: function() {
@@ -250,7 +260,9 @@
         newExpression: '.criteria_editor_new_expression',
         newGroup: '.criteria_editor_new_group',
         placeholder: '.criteria_editor_empty_placeholder',
-        rowWrapper: '.criteria_editor_row_wrapper'
+        rowWrapper: '.criteria_editor_row_wrapper',
+        deleteExpression: '.criteria_expression_delete',
+        deleteGroup: '.criteria_group_delete'
     };
 
 })( jQuery, window, document );
