@@ -1,4 +1,8 @@
 <div class="criteria_group_row">
   <span class="criteria_group_row_header">AND / OR</span>
-  <%= cell('criteria_operator/ui_component/criteria_editor', model).(:expression_row) %>
+  <div class="criteria_editor_row_wrapper">
+    <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
+  </div>
+  <a href="#" class="criteria_editor_new_group">Add group</a><br />
+  <a href="#" class="criteria_editor_new_expression">Add expression</a>
 </div>

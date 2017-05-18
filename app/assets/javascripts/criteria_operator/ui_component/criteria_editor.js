@@ -141,8 +141,11 @@
                  */
             //    plugin.someOtherFunction.call(plugin);
             //});
-            plugin.$element.find(plugin.options.newExpression).on('click'+'.'+plugin._name, function() {
-               plugin.createNewExpression(plugin)
+            plugin.$element.find(plugin.options.newExpression).on('click'+'.'+plugin._name, function(event) {
+                plugin.createNewExpression.call(plugin, plugin.options, event.target);
+            });
+            plugin.$element.find(plugin.options.newGroup).on('click'+'.'+plugin._name, function(event) {
+                plugin.createNewGroup.call(plugin, plugin.options, event.target);
             });
         },
 
@@ -150,17 +153,36 @@
         unbindEvents: function() {
             /*
              Unbind all events in our plugin's namespace that are attached
-             to "this.$element".
+             to child elements.
              */
-            this.$element.off('.'+this._name);
+            this.$element.find("*").off('.'+this._name);
         },
 
-        createNewExpression: function() {
+        createNewExpression: function(options, element) {
+            var plugin = this;
             $.ajax("/criteria_operator-ui_component/create_expression").done(function(data) {
-                // TODO: make sure only the correct placeholder is deleted
-                $(".criteria_editor_empty_placeholder").remove()
-                $(".criteria_editor_row_wrapper").append(data['html'])
+                var wrapper = $(element).parent().children(options.rowWrapper);
+                wrapper.children(options.placeholder).remove();
+                wrapper.append(data['html']);
+                plugin.rebind();
             });
+        },
+
+        createNewGroup: function(options, element) {
+            var plugin = this;
+            $.ajax("/criteria_operator-ui_component/create_group").done(function(data) {
+                var wrapper = $(element).parent().children(options.rowWrapper);
+                wrapper.children(options.placeholder).remove();
+                wrapper.append(data['html']);
+                plugin.rebind();
+            });
+        },
+
+        rebind: function() {
+            // TODO: reduce workload by just binding new instead of rebinding all
+            var plugin = this;
+            plugin.unbindEvents();
+            plugin.bindEvents();
         },
 
         callback: function() {
@@ -225,7 +247,10 @@
         name: '',
         property: 'value',
         onComplete: null,
-        newExpression: '.criteria_editor_new_expression'
+        newExpression: '.criteria_editor_new_expression',
+        newGroup: '.criteria_editor_new_group',
+        placeholder: '.criteria_editor_empty_placeholder',
+        rowWrapper: '.criteria_editor_row_wrapper'
     };
 
 })( jQuery, window, document );

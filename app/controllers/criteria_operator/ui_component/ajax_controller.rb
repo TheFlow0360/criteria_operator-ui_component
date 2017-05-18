@@ -10,6 +10,12 @@ module CriteriaOperator
         html = CriteriaEditorCell.call(operator).call(:expression_row)
         render json: { html: html }
       end
+
+      def create_group
+        operator = 42
+        html = CriteriaEditorCell.call(operator).call(:group_row)
+        render json: { html: html }
+      end
     end
   end
 end
