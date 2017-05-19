@@ -75,7 +75,7 @@
              Create additional methods below and call them via
              "this.myFunction(arg1, arg2)", ie: "this.buildCache();".
 
-             Note, you can cccess the DOM node(s), plugin name, default
+             Note, you can access the DOM node(s), plugin name, default
              plugin options and custom plugin options for a each instance
              of the plugin by using the variables "this.element",
              "this._name", "this._defaults" and "this.options" created in
@@ -96,7 +96,7 @@
              Since we store data for each instance of the plugin in its
              instantiating element using the $.data method (as explained
              in the plugin wrapper below), we can call methods directly on
-             the instance outside of the plugin initalization, ie:
+             the instance outside of the plugin initialization, ie:
              $('selector').data('plugin_myPluginName').someOtherFunction();
 
              Consequently, the destroy method can be called using:
@@ -115,6 +115,7 @@
              the plugin. Cached variables can then be used in other methods.
              */
             this.$element = $(this.element);
+            this.$valueInput = this.$element.find(this.options.valueInput)
         },
 
         // Bind events that trigger methods
@@ -142,10 +143,10 @@
             //    plugin.someOtherFunction.call(plugin);
             //});
             plugin.$element.find(plugin.options.newExpression).on('click'+'.'+plugin._name, function(event) {
-                plugin.createNewExpression.call(plugin, plugin.options, event.target);
+                plugin.createElement.call(plugin, 'expression', plugin.options, event.target);
             });
             plugin.$element.find(plugin.options.newGroup).on('click'+'.'+plugin._name, function(event) {
-                plugin.createNewGroup.call(plugin, plugin.options, event.target);
+                plugin.createElement.call(plugin, 'group', plugin.options, event.target);
             });
             plugin.$element.find(plugin.options.deleteExpression).on('click'+'.'+plugin._name, function(event) {
                 plugin.deleteElement.call(plugin, plugin.options, event.target);
@@ -164,27 +165,32 @@
             this.$element.find("*").off('.'+this._name);
         },
 
-        createNewExpression: function(options, element) {
+        createElement: function(type, options, element) {
             var plugin = this;
-            $.ajax("/criteria_operator-ui_component/create_expression").done(function(data) {
+            var requestData = {};
+            requestData["value"] = plugin.$valueInput.val();
+            requestData["locator"] = plugin.buildLocatorChain(element, options);
+            requestData["child_count"] = $(element).parent().data("childcount");
+            $.ajax({
+                url: "/criteria_operator-ui_component/create_" + type,
+                data: requestData,
+                method: "POST"
+            }).done(function(data) {
                 var wrapper = $(element).parent().children(options.rowWrapper);
                 wrapper.children(options.placeholder).remove();
                 wrapper.append(data['html']);
-                plugin.rebind();
-            });
-        },
-
-        createNewGroup: function(options, element) {
-            var plugin = this;
-            $.ajax("/criteria_operator-ui_component/create_group").done(function(data) {
-                var wrapper = $(element).parent().children(options.rowWrapper);
-                wrapper.children(options.placeholder).remove();
-                wrapper.append(data['html']);
+                $(element).parent().data("childcount", $(element).parent().data("childcount") + 1);
+                plugin.$valueInput.val(data['operator']);
                 plugin.rebind();
             });
         },
 
         deleteElement: function(options, element) {
+            $(element).parent().nextAll().each(function() {
+                $( this ).attr('data-locator', $( this ).attr('data-locator') - 1);
+            });
+            var parentGroup = $(element).parent().parent().parent();
+            parentGroup.data("childcount", parentGroup.data("childcount") - 1);
             $(element).parent().remove()
         },
 
@@ -195,22 +201,19 @@
             plugin.bindEvents();
         },
 
-        callback: function() {
-            // Cache onComplete option
-            var onComplete = this.options.onComplete;
-
-            if ( typeof onComplete === 'function' ) {
-                /*
-                 Use the "call" method so that inside of the onComplete
-                 callback function the "this" keyword refers to the
-                 specific DOM node that called the plugin.
-
-                 More: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call
-                 */
-                onComplete.call(this.element);
+        buildLocatorChain: function(element, options) {
+            if ($(element).hasClass(options.rootElementClass)) {
+                return ""
+            } else {
+                var chain = this.buildLocatorChain($(element).parent(), options);
+                var locator = $(element).attr("data-locator");
+                console.log(locator)
+                if (typeof locator !== typeof undefined && locator !== false) {
+                    chain = (chain === "" ? "" : chain + "," ) + locator;
+                }
+                return chain;
             }
         }
-
     });
 
     /*
@@ -254,21 +257,22 @@
      More: http://learn.jquery.com/plugins/advanced-plugin-concepts/
      */
     $.fn.criteriaEditor.defaults = {
-        name: '',
         property: 'value',
         onComplete: null,
+        rootElementClass: 'criteria_editor',
         newExpression: '.criteria_editor_new_expression',
         newGroup: '.criteria_editor_new_group',
         placeholder: '.criteria_editor_empty_placeholder',
         rowWrapper: '.criteria_editor_row_wrapper',
         deleteExpression: '.criteria_expression_delete',
-        deleteGroup: '.criteria_group_delete'
+        deleteGroup: '.criteria_group_delete',
+        valueInput: '.criteria_editor_root_operator'
     };
 
 })( jQuery, window, document );
 
 $(document).ready(function() {
     $('.criteria_editor').criteriaEditor({
-        name: 'criteria_editor'
+        rootElementClass: 'criteria_editor'
     });
 });
