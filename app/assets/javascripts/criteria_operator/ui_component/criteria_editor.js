@@ -186,12 +186,23 @@
         },
 
         deleteElement: function(options, element) {
-            $(element).parent().nextAll().each(function() {
-                $( this ).attr('data-locator', $( this ).attr('data-locator') - 1);
+            var plugin = this;
+            var requestData = {};
+            requestData["value"] = plugin.$valueInput.val();
+            requestData["locator"] = plugin.buildLocatorChain(element, options);
+            $.ajax({
+                url: "/criteria_operator-ui_component/delete_element",
+                data: requestData,
+                method: "POST"
+            }).done(function(data) {
+                $(element).parent().nextAll().each(function() {
+                    $( this ).attr('data-locator', $( this ).attr('data-locator') - 1);
+                });
+                var parentGroup = $(element).parent().parent().parent();
+                parentGroup.data("childcount", parentGroup.data("childcount") - 1);
+                $(element).parent().remove()
+                plugin.$valueInput.val(data['operator']);
             });
-            var parentGroup = $(element).parent().parent().parent();
-            parentGroup.data("childcount", parentGroup.data("childcount") - 1);
-            $(element).parent().remove()
         },
 
         rebind: function() {
