@@ -7,38 +7,47 @@ module CriteriaOperator
   module UiComponent
     class AjaxController < ApplicationController
       def create_expression
-        return unless ajax_params.has_key? :value
+        return unless ajax_params.has_key? :root_operator
         root_operator = root_op_from_params
         operator = BinaryOperator.new
-        extend_operator root_operator, operator, ajax_params[:locator]
+        add_sub_operator root_operator, operator, ajax_params[:locator]
         html = CriteriaEditorCell.call(operator).call(:expression_row, locator: new_locator)
         render json: { html: html, operator: YAML.dump(root_operator) }
       end
 
       def create_group
-        return unless ajax_params.has_key? :value
+        return unless ajax_params.has_key? :root_operator
         root_operator = root_op_from_params
         operator = GroupOperator.new
-        extend_operator root_operator, operator, ajax_params[:locator]
+        add_sub_operator root_operator, operator, ajax_params[:locator]
         html = CriteriaEditorCell.call(operator).call(:group_row, locator: new_locator)
         render json: { html: html, operator: YAML.dump(root_operator) }
       end
 
       def delete_element
-        return unless (ajax_params.has_key? :value) && (ajax_params.has_key? :locator)
+        return unless (ajax_params.has_key? :root_operator) && (ajax_params.has_key? :locator)
         root_operator = root_op_from_params
         remove_sub_operator root_operator, ajax_params[:locator]
+        render json: { operator: YAML.dump(root_operator) }
+      end
+
+      def operand_change
+        return unless (ajax_params.has_key? :root_operator) && (ajax_params.has_key? :locator)
+        root_operator = root_op_from_params
+        op = locate_sub_operator root_operator, ajax_params[:locator]
+        op.left_operand = OperandProperty.new(ajax_params[:operand_value]) if ajax_params[:operand_type] == 'left'
+        op.right_operand = OperandValue.new(ajax_params[:operand_value]) if ajax_params[:operand_type] == 'right'
         render json: { operator: YAML.dump(root_operator) }
       end
 
       private
 
       def ajax_params
-        params.permit :value, :locator, :child_count
+        params.permit :root_operator, :locator, :child_count, :operand_type, :operand_value
       end
 
       def root_op_from_params
-        YAML.safe_load ajax_params[:value], (ObjectSpace.each_object(Class).select { |klass| klass < BaseOperator })
+        YAML.safe_load ajax_params[:root_operator], (ObjectSpace.each_object(Class).select { |klass| klass < BaseOperator })
       end
 
       def new_locator
@@ -59,7 +68,7 @@ module CriteriaOperator
         op
       end
 
-      def extend_operator(root_op, extend_op, locator)
+      def add_sub_operator(root_op, extend_op, locator)
         op = locate_sub_operator root_op, locator
         op.operand_collection << extend_op
       end
