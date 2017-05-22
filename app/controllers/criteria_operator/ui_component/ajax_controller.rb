@@ -59,11 +59,12 @@ module CriteriaOperator
       end
 
       def locate_sub_operator(operator, locator)
-        op = operator
+        op = get_negated_group_if_exist operator
         locator.split(',').map(&:to_i).each do |pos|
           # TODO: some kind of error handling beside cancelling?
           return nil unless op.is_a? GroupOperator
           op = op.operand_collection[pos]
+          op = get_negated_group_if_exist op
         end
         op
       end
@@ -81,6 +82,14 @@ module CriteriaOperator
           op = locate_sub_operator op, locator_array.join(',')
         end
         op.operand_collection.delete_at pos.to_i
+      end
+
+      def get_negated_group_if_exist(op)
+        if op.is_a?(UnaryOperator) && (op.operator_type == UnaryOperatorType::NOT)
+          op.operand
+        else
+          op
+        end
       end
     end
   end

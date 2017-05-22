@@ -40,7 +40,7 @@ module CriteriaOperator
       end
 
       def empty?
-        !model.kind_of?(GroupOperator) || model.operand_collection.empty?
+        !@group.kind_of?(GroupOperator) || @group.operand_collection.empty?
       end
 
       def model_negated_group?
