@@ -1,11 +1,20 @@
-<div class="criteria_editor_row_wrapper">
-  <% if empty? %>
-    <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
-  <% else %>
-    <% c = 0 %>
-    <% model.operand_collection.each do |operand| %>
-      <%= cell('criteria_operator/ui_component/criteria_editor', operand).(:choose_template, locator: c) %>
-      <% c += 1 %>
-    <% end %>
+<div class="criteria_group_row" data-locator="<%= @locator %>" data-childcount="<%= @group.operand_collection.count %>">
+  <button class="criteria_expression_options_button">...</button>
+  <span class="criteria_group_row_header"><%= caption %></span>
+  <% if @allow_delete %>
+      <a href="#" class="criteria_group_delete">Delete</a>
   <% end %>
+  <div class="criteria_editor_row_wrapper">
+    <% if empty? %>
+        <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
+    <% else %>
+        <% c = 0 %>
+        <% @group.operand_collection.each do |operand| %>
+            <%= cell('criteria_operator/ui_component/criteria_editor', operand).(:choose_template, locator: c) %>
+            <% c += 1 %>
+        <% end %>
+    <% end %>
+  </div>
+  <a href="#" class="criteria_editor_new_group">Add group</a><br />
+  <a href="#" class="criteria_editor_new_expression">Add expression</a>
 </div>

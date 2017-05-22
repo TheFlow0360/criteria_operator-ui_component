@@ -11,7 +11,7 @@ module CriteriaOperator
         root_operator = root_op_from_params
         operator = BinaryOperator.new
         add_sub_operator root_operator, operator, ajax_params[:locator]
-        html = CriteriaEditorCell.call(operator).call(:expression_row, locator: new_locator)
+        html = ExpressionCell.call(operator).call(:show, locator: new_locator)
         render json: { html: html, operator: YAML.dump(root_operator) }
       end
 
@@ -20,7 +20,7 @@ module CriteriaOperator
         root_operator = root_op_from_params
         operator = GroupOperator.new
         add_sub_operator root_operator, operator, ajax_params[:locator]
-        html = CriteriaEditorCell.call(operator).call(:group_row, locator: new_locator)
+        html = GroupCell.call(operator).call(:show, locator: new_locator)
         render json: { html: html, operator: YAML.dump(root_operator) }
       end
 

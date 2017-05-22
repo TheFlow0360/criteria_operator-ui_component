@@ -2,7 +2,8 @@ module CriteriaOperator
   module UiComponent
     class ExpressionCell < BaseCell
 
-      def show
+      def show(options = {})
+        @locator = options.has_key?(:locator) ? options[:locator] : ''
         render
       end
 
