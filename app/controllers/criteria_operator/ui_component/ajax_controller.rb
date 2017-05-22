@@ -81,6 +81,7 @@ module CriteriaOperator
         unless locator_array.empty?
           op = locate_sub_operator op, locator_array.join(',')
         end
+        op = get_negated_group_if_exist op
         op.operand_collection.delete_at pos.to_i
       end
 
