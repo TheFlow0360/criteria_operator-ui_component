@@ -1,3 +1,11 @@
 <div class="criteria_editor_row_wrapper">
-  <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
+  <% if empty? %>
+    <div class="criteria_editor_empty_placeholder">It's lonely inside here...</div>
+  <% else %>
+    <% c = 0 %>
+    <% model.operand_collection.each do |operand| %>
+      <%= cell('criteria_operator/ui_component/criteria_editor', operand).(:choose_template, locator: c) %>
+      <% c += 1 %>
+    <% end %>
+  <% end %>
 </div>

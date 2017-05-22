@@ -6,6 +6,12 @@ module CriteriaOperator
         render
       end
 
+    private
+
+      def empty?
+        !model.kind_of?(GroupOperator) || model.operand_collection.empty?
+      end
+
     end
   end
 end

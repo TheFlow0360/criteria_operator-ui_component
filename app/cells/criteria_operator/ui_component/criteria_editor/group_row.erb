@@ -1,6 +1,6 @@
-<div class="criteria_group_row" data-locator="<%= @locator %>" data-childcount="0">
+<div class="criteria_group_row" data-locator="<%= @locator %>" data-childcount="<%= @group.operand_collection.count %>">
   <button class="criteria_expression_options_button">...</button>
-  <span class="criteria_group_row_header"><%= test %></span>
+  <span class="criteria_group_row_header"><%= caption %></span>
   <% if @allow_delete %>
     <a href="#" class="criteria_group_delete">Delete</a>
   <% end %>
