@@ -25,23 +25,15 @@ module CriteriaOperator
         end
       end
 
-      def operator
-        if model.kind_of?(BinaryOperator)
-          case model.operator_type
-          when BinaryOperatorType::EQUAL
-            'equal to'
-          when BinaryOperatorType::NOT_EQUAL
-            'not equal to'
-          when BinaryOperatorType::GREATER
-            'greater than'
-          when BinaryOperatorType::GREATER_OR_EQUAL
-            'greater than or equal to'
-          when BinaryOperatorType::LESS
-            'less than'
-          when BinaryOperatorType::LESS_OR_EQUAL
-            'less than or equal to'
-          end
-        end
+      def operators
+        ops = []
+        ops << { value: BinaryOperatorType::EQUAL, text: 'equal to' }
+        ops << { value: BinaryOperatorType::NOT_EQUAL, text: 'not equal to' }
+        ops << { value: BinaryOperatorType::GREATER, text: 'greater than' }
+        ops << { value: BinaryOperatorType::GREATER_OR_EQUAL, text: 'greater than or equal to' }
+        ops << { value: BinaryOperatorType::LESS, text: 'less than' }
+        ops << { value: BinaryOperatorType::LESS_OR_EQUAL, text: 'less than or equal to' }
+        ops
       end
     end
   end

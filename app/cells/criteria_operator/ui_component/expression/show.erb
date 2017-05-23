@@ -1,7 +1,11 @@
 <div class="criteria_expression_row" data-locator="<%= @locator %>">
   <button class="criteria_expression_options_button">...</button>
   <input type="text" class="criteria_operand_input binary_operator_left_operand" placeholder="property" value="<%= property_name %>" />
-  <span class="criteria_expression_operator"><%= operator %></span>
+  <select class="criteria_operator_type_input">
+    <% operators.each do |op| %>
+      <option value="<%= op[:value] %>" <% if op[:value] == model.operator_type %>selected<% end %>><%= op[:text] %></option>
+    <% end %>
+  </select>
   <input type="text" class="criteria_operand_input binary_operator_right_operand" placeholder="value" value="<%= value %>" />
   <a href="#" class="criteria_expression_delete">Delete</a>
 </div>

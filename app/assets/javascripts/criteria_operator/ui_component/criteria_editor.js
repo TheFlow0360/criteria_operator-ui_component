@@ -157,6 +157,9 @@
             plugin.$element.find(plugin.options.operandInput).on('change'+'.'+plugin._name, function(event) {
                 plugin.operandChanged.call(plugin, plugin.options, event.target);
             });
+            plugin.$element.find(plugin.options.operatorTypeInput).on('change'+'.'+plugin._name, function(event) {
+                plugin.operatorTypeChanged.call(plugin, plugin.options, event.target);
+            });
         },
 
         // Unbind events that trigger methods
@@ -221,6 +224,21 @@
             requestData["operand_value"] = $(element).val();
             $.ajax({
                 url: "/criteria_operator-ui_component/operand_change",
+                data: requestData,
+                method: "POST"
+            }).done(function(data) {
+                plugin.$valueInput.val(data['operator']);
+            });
+        },
+
+        operatorTypeChanged: function(options, element) {
+            var plugin = this;
+            var requestData = {};
+            requestData["root_operator"] = plugin.$valueInput.val();
+            requestData["locator"] = plugin.buildLocatorChain(element, options);
+            requestData["operator_type_value"] = $(element).val();
+            $.ajax({
+                url: "/criteria_operator-ui_component/operator_type_change",
                 data: requestData,
                 method: "POST"
             }).done(function(data) {
@@ -301,6 +319,7 @@
         deleteGroup: '.criteria_group_delete',
         valueInput: '.criteria_editor_root_operator',
         operandInput: '.criteria_operand_input',
+        operatorTypeInput: '.criteria_operator_type_input',
         binaryLeftOperandClass: 'binary_operator_left_operand',
         binaryRightOperandClass: 'binary_operator_right_operand'
     };

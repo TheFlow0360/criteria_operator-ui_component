@@ -40,10 +40,18 @@ module CriteriaOperator
         render json: { operator: YAML.dump(root_operator) }
       end
 
+      def operator_type_change
+        return unless (ajax_params.has_key? :root_operator) && (ajax_params.has_key? :locator)
+        root_operator = root_op_from_params
+        op = locate_sub_operator root_operator, ajax_params[:locator]
+        op.operator_type = ajax_params[:operator_type_value]
+        render json: { operator: YAML.dump(root_operator) }
+      end
+
       private
 
       def ajax_params
-        params.permit :root_operator, :locator, :child_count, :operand_type, :operand_value
+        params.permit :root_operator, :locator, :child_count, :operand_type, :operand_value, :operator_type_value
       end
 
       def root_op_from_params
