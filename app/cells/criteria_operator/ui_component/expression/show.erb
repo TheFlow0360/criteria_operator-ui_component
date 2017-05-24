@@ -1,9 +1,8 @@
 <div class="criteria_expression_row" data-locator="<%= @locator %>">
-  <button class="criteria_expression_options_button">...</button>
   <input type="text" class="criteria_operand_input binary_operator_left_operand" placeholder="property" value="<%= property_name %>" />
-  <select class="criteria_operator_type_input">
+  <select class="criteria_operator_type_input expression_operator_type">
     <% operators.each do |op| %>
-      <option value="<%= op[:value] %>" <% if op[:value] == model.operator_type %>selected<% end %>><%= op[:text] %></option>
+      <option value="<%= op[:value] %>" <% if op[:value] == operator_type %>selected<% end %>><%= op[:text] %></option>
     <% end %>
   </select>
   <input type="text" class="criteria_operand_input binary_operator_right_operand" placeholder="value" value="<%= value %>" />

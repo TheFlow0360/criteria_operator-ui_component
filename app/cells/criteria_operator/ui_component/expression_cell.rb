@@ -25,6 +25,14 @@ module CriteriaOperator
         end
       end
 
+      def operator_type
+        if model.kind_of?(BinaryOperator)
+          model.operator_type
+        else
+          0
+        end
+      end
+
       def operators
         ops = []
         ops << { value: BinaryOperatorType::EQUAL, text: 'equal to' }

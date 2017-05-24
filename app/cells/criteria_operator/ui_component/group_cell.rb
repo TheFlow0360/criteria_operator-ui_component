@@ -17,26 +17,23 @@ module CriteriaOperator
 
     private
 
-      def caption
+      def operator_type
         if model.kind_of? GroupOperator
-          case model.operator_type
-          when GroupOperatorType::AND
-            'AND'
-          when GroupOperatorType::OR
-            'OR'
-          else
-            'Invalid Group Operator!'
-          end
+          model.operator_type
         elsif model_negated_group?
-          case model.operand.operator_type
-          when GroupOperatorType::AND
-            'NAND'
-          when GroupOperatorType::OR
-            'NOR'
-          else
-            'Invalid Group Operator!'
-          end
+          model.operand.operator_type * -1
+        else
+          0
         end
+      end
+
+      def operators
+        ops = []
+        ops << { value: GroupOperatorType::AND, text: 'AND' }
+        ops << { value: GroupOperatorType::OR, text: 'OR' }
+        ops << { value: -1 * GroupOperatorType::AND, text: 'NAND' }
+        ops << { value: -1 * GroupOperatorType::OR, text: 'NOR' }
+        ops
       end
 
       def empty?

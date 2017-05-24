@@ -40,11 +40,18 @@ module CriteriaOperator
         render json: { operator: YAML.dump(root_operator) }
       end
 
-      def operator_type_change
+      def expression_type_change
         return unless (ajax_params.has_key? :root_operator) && (ajax_params.has_key? :locator)
         root_operator = root_op_from_params
         op = locate_sub_operator root_operator, ajax_params[:locator]
         op.operator_type = ajax_params[:operator_type_value]
+        render json: { operator: YAML.dump(root_operator) }
+      end
+
+      def group_type_change
+        return unless (ajax_params.has_key? :root_operator) && (ajax_params.has_key? :locator)
+        root_operator = root_op_from_params
+        root_operator = change_sub_group_type root_operator, ajax_params[:locator], ajax_params[:operator_type_value].to_i
         render json: { operator: YAML.dump(root_operator) }
       end
 
@@ -93,12 +100,46 @@ module CriteriaOperator
         op.operand_collection.delete_at pos.to_i
       end
 
+      def change_sub_group_type(root_op, locator, op_type)
+        op = root_op
+        last_pos = -1
+        parent_op = nil
+        locator_array = locator.split(',')
+        locator_array.map(&:to_i).each do |pos|
+          op = get_negated_group_if_exist op
+          last_pos = pos
+          parent_op = op
+          op = op.operand_collection[pos]
+        end
+
+        if negation? op
+          if op_type > 0
+            parent_op.operand_collection[last_pos] = op.operand
+            op.operand.operator_type = op_type
+          else
+            op.operand.operator_type = op_type * -1
+          end
+        else
+          if op_type < 0
+            parent_op.operand_collection[last_pos] = UnaryOperator.new op, UnaryOperatorType::NOT
+            op.operator_type = op_type * -1
+          else
+            op.operator_type = op_type
+          end
+        end
+        root_op
+      end
+
       def get_negated_group_if_exist(op)
-        if op.is_a?(UnaryOperator) && (op.operator_type == UnaryOperatorType::NOT)
+        if negation? op
           op.operand
         else
           op
         end
+      end
+
+      def negation?(op)
+        op.is_a?(UnaryOperator) && (op.operator_type == UnaryOperatorType::NOT)
       end
     end
   end

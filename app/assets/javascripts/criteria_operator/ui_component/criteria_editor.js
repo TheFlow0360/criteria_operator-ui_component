@@ -220,7 +220,7 @@
                 requestData["operand_type"] = "left";
             } else if ($(element).hasClass(options.binaryRightOperandClass)) {
                 requestData["operand_type"] = "right";
-            }
+            } else { return }
             requestData["operand_value"] = $(element).val();
             $.ajax({
                 url: "/criteria_operator-ui_component/operand_change",
@@ -237,8 +237,14 @@
             requestData["root_operator"] = plugin.$valueInput.val();
             requestData["locator"] = plugin.buildLocatorChain(element, options);
             requestData["operator_type_value"] = $(element).val();
+            var type;
+            if ($(element).hasClass(options.expressionOperatorTypeClass)) {
+                type = "expression_type_change"
+            } else if ($(element).hasClass(options.groupOperatorTypeClass)) {
+                type = "group_type_change"
+            } else { return }
             $.ajax({
-                url: "/criteria_operator-ui_component/operator_type_change",
+                url: "/criteria_operator-ui_component/" + type,
                 data: requestData,
                 method: "POST"
             }).done(function(data) {
@@ -321,7 +327,9 @@
         operandInput: '.criteria_operand_input',
         operatorTypeInput: '.criteria_operator_type_input',
         binaryLeftOperandClass: 'binary_operator_left_operand',
-        binaryRightOperandClass: 'binary_operator_right_operand'
+        binaryRightOperandClass: 'binary_operator_right_operand',
+        expressionOperatorTypeClass: 'expression_operator_type',
+        groupOperatorTypeClass: 'group_operator_type'
     };
 
 })( jQuery, window, document );
