@@ -1,5 +1,5 @@
 <div class="criteria_editor">
   <span class="criteria_editor_header">This is the header</span>
   <%= cell('criteria_operator/ui_component/group', model).(:show, allow_delete: false) %>
-  <input type="hidden" class="criteria_editor_root_operator" value="<%= serialized_operator %>" />
+  <input type="hidden" id="<%= input_id %>" name="<%= input_name %>" class="criteria_editor_root_operator" value="<%= serialized_operator %>" />
 </div>
