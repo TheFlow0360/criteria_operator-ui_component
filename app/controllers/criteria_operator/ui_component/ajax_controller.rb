@@ -62,7 +62,7 @@ module CriteriaOperator
       end
 
       def root_op_from_params
-        YAML.safe_load ajax_params[:root_operator], (ObjectSpace.each_object(Class).select { |klass| klass < BaseOperator })
+        BaseOperator.deserialize ajax_params[:root_operator]
       end
 
       def new_locator

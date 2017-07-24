@@ -8,6 +8,8 @@ module CriteriaOperator
         @input_id = options[:id] if options.has_key? :id
         @input_name = options[:name] if options.has_key? :name
         # TODO: provide support for read_only
+
+        @operator = model.is_a?(String) ? BaseOperator.deserialize(model) : model
         render
       end
 
@@ -30,7 +32,7 @@ module CriteriaOperator
       end
 
       def serialized_operator
-        YAML.dump(model) if model.is_a? BaseOperator
+        @operator.serialize if @operator.is_a? BaseOperator
       end
     end
   end

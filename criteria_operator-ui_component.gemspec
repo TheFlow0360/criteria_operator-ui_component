@@ -45,7 +45,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "cells-rails", "~> 0.0"
   spec.add_dependency "cells-erb", "~> 0.1"
   spec.add_dependency "jquery-rails", "~> 4.3"
-  spec.add_dependency "criteria_operator", "~> 0.2"
+  spec.add_dependency "criteria_operator", "~> 0.3"
 
   # let yard run on install
   spec.metadata["yard.run"] = "yri"
